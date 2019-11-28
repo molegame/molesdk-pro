@@ -18,9 +18,9 @@ class CreateGameChannelsTable extends Migration
             $table->unsignedBigInteger('channel_id');
             $table->string('bundle_id')->nullable();
             $table->string('icon')->nullable();
-            $table->string('splashes')->nullable();
-            $table->string('goods')->nullable();
-            $table->string('params')->nullable();
+            $table->string('splashes', 2048)->nullable();
+            $table->string('goods', 4096)->nullable();
+            $table->string('params', 4096)->nullable();
             $table->timestamps();
             
             $table->foreign('game_id')

@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('sdk', function ($app) {
+            return new \App\Sdk\SdkManager($app);
+        });
     }
 
     /**

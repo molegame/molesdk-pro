@@ -97,9 +97,9 @@ class ChannelController extends Controller
         $request->validate([
             'bundle_id' => 'string|max:255',
             'icon' => 'string|max:255',
-            'splashes' => 'string|max:255',
-            'goods' => 'string|max:255',
-            'params' => 'string|max:255',
+            'splashes' => 'string|max:2048',
+            'goods' => 'string|max:4096',
+            'params' => 'string|max:4096',
         ]);
 
         $game = $this->guard()->user()->games()->findOrFail($game_id);

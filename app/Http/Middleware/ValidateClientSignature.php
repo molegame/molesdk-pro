@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Model\Game;
+use App\Models\Game;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
@@ -79,7 +79,6 @@ class ValidateClientSignature
         $original = collect($request->except(['signature', 'token']))->sortKeys()->implode('&');        
         $signature = hash_hmac('sha256', $original, $this->key);
 
-        return true;
-        //return  hash_equals($signature, (string) $request->input('signature', ''));
+        return  hash_equals($signature, (string) $request->input('signature', ''));
     }
 }

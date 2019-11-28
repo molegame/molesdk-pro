@@ -3,6 +3,7 @@
 namespace App\Models\Game;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Channel extends Model
 {
@@ -40,5 +41,35 @@ class Channel extends Model
     public function game()
     {
         return $this->belongsTo(App\Models\Game::class);
+    }
+
+    /**
+     * Get the base info of channel.
+     */
+    public function info()
+    {
+        $channels = config('channels');
+        foreach ($channels as $channel) {
+            if ($channel['id'] == $this->channel_id) {
+                return $channel;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the driver.
+     */
+    public function driver()
+    {
+        return $this->info()['driver'];
+    }
+
+    /**
+     * Get the url to verify.
+     */
+    public function verifyUrl()
+    {
+        return $this->info()['verify_url'];
     }
 }
