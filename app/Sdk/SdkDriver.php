@@ -4,7 +4,6 @@ namespace App\Sdk;
 
 use Illuminate\Http\Request;
 use App\Models\Game\Channel;
-use App\Models\Game;
 
 interface SdkDriver
 {
@@ -18,10 +17,10 @@ interface SdkDriver
     public function verify(Channel $channel, $token);
 
     /**
-     * Callback after paid.
+     * Validate callback of pay.
+     * 
      * @param Channel $channel
-     * @param Game $game
      * @param Request $request
      */
-    //public function callback(Request $request, Channel $channel, Game $game);
+    public function validatePay(Request $request, Channel $channel);
 }

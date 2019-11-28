@@ -12,11 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api) {
     // 渠道列表
@@ -56,13 +51,15 @@ $api->version('v1', function ($api) {
     $api->group(['middleware' => 'signed.client'], function ($api) {
         $api->post('initialize', 'App\Http\Controllers\Player\GameController@initialize');
         $api->post('login', 'App\Http\Controllers\Player\LoginController@login');
-        $api->post('logout', 'App\Http\Controllers\Player\LoginController@logout');
-        $api->post('order/create', 'App\Http\Controllers\Player\OrderController@create');
+
+        $api->group(['middleware' => ['auth:player']], function ($api) {
+            $api->post('logout', 'App\Http\Controllers\Player\LoginController@logout');
+            $api->post('order/create', 'App\Http\Controllers\Player\OrderController@create');
+        });
     });
     // 游戏服
-    // Api for server
     $api->group(['middleware' => ['signed.server', 'auth:player']], function ($api) {
-        $api->post('user/verify', 'App\Http\Controllers\PlayerController@verify');
+        $api->post('user/verify', 'App\Http\Controllers\SdkController@verify');
     });
     // 渠道回调
     $api->any('pay_callback/{channel}/{game}', 'App\Http\Controllers\SdkController@callback');

@@ -2,6 +2,7 @@
 
 namespace App\Sdk;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Manager;
 use App\Models\Game\Channel;
 use App\Models\Game;
@@ -52,16 +53,14 @@ class SdkManager extends Manager
     }
 
     /**
-     * Callback after paid.
+     * Validate callback of pay.
      *
      * @param Request $request
      */
-    public function callback(Request $request, $channel_id, $game_id)
+    public function validatePay(Request $request, $channel)
     {
-        $driver = config('channels')[$channel_id]['driver'];
-        $channel = Channel::findOrFail($channel_id);
-        $game = Game::findOrFail($game_id);
+        $driver = $channel->info()['driver'];
 
-        return $this->driver($driver)->callback($request, $channel, $game);
+        return $this->driver($driver)->validatePay($request, $channel);
     }
 }

@@ -9,6 +9,9 @@ use App\Models\Game;
 use App\Models\Game\Channel;
 use App\Player;
 use App\Utils\IDGenerator;
+use Illuminate\Validation\UnauthorizedException;
+
+use Exception;
 
 class LoginController extends Controller
 {
@@ -92,9 +95,14 @@ class LoginController extends Controller
         $game = Game::findOrFail($request->app_id);
         $channel = $game->channels()->where('channel_id', $request->channel_id)->first();
 
+        try {
+            $channel_user_id = \Sdk::verify($channel, $request->channel_token);
+        } catch (Exception $exception) {
+            throw new UnauthorizedException;
+        }
         return [
             'channel_id' => $request->channel_id,
-            'channel_user_id' => \Sdk::verify($channel, $request->channel_token)
+            'channel_user_id' => $channel_user_id
         ];
     }
 
