@@ -32,10 +32,10 @@ $api->version('v1', function ($api) {
     $api->group(["prefix" => "developer"], function ($api) {
         $api->post('register', 'App\Http\Controllers\Developer\RegisterController@register');
         $api->post('login', 'App\Http\Controllers\Developer\LoginController@login');
-        $api->post('logout', 'App\Http\Controllers\Developer\LoginController@logout');
         $api->post('refresh_token','App\Http\Controllers\Developer\LoginController@refreshToken');
 
         $api->group(['middleware' => ['auth:developer']], function ($api) {
+            $api->post('logout', 'App\Http\Controllers\Developer\LoginController@logout');
             // 玩家列表
             $api->resource('players', 'App\Http\Controllers\Developer\PlayerController');
             // 游戏列表

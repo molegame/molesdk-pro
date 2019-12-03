@@ -68,7 +68,7 @@ class Mole implements SdkDriver
     {
         $request->validate([
             'order_id' => 'required|string|max:255',
-            'cp_order_id' => 'nullable|string|max:255',
+            'cp_order_id' => 'required|string|max:255',
             'amount' => 'required|string|max:255',
             'signature' => 'required|string|max:255'
         ]);

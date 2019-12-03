@@ -47,7 +47,7 @@ class SdkManager extends Manager
      */
     public function verify($channel, $token)
     {
-        $driver = $channel->info()['driver'];
+        $driver = $channel->driver();
         
         return $this->driver($driver)->verify($channel, $token);
     }
@@ -59,7 +59,7 @@ class SdkManager extends Manager
      */
     public function validatePay(Request $request, $channel)
     {
-        $driver = $channel->info()['driver'];
+        $driver = $channel->driver();
 
         return $this->driver($driver)->validatePay($request, $channel);
     }

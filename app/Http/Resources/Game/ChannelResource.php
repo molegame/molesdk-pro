@@ -14,6 +14,14 @@ class ChannelResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $base = $this->base();
+        return [
+            'id' => $this->channel_id,
+            'name' => $base['name'],
+            'version' => $base['version'],
+            'bundle_id' => $this->bundle_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

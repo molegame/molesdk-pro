@@ -35,8 +35,6 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('jwt.refresh', ['only' => 'refreshToken']);
     }
     
     /**
@@ -137,7 +135,8 @@ class LoginController extends Controller
      */
     public function refreshToken(Request $request)
     {
-        return $this->responseToken();
+        \Log::debug($request);
+        return $this->responseToken($this->guard()->refresh());
     }
 
     /**
@@ -146,10 +145,10 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
-    protected function responseToken()
+    protected function responseToken($token = null)
     {
         return response()->json([
-            'access_token' => (string)$this->guard()->getToken(),
+            'access_token' => (string)($token ?: $this->guard()->getToken()),
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60
         ]);

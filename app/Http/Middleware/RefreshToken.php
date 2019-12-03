@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
 use Tymon\JWTAuth\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -30,26 +29,14 @@ class RefreshToken extends BaseMiddleware
         } catch (TokenExpiredException $exception) {
             try {
                 $token = $this->auth->refresh();
-                Auth::guard('api')->onceUsingId($this->auth->manager()->getPayloadFactory()->buildClaimsCollection()->toPlainArray()['sub']);
+
+                if (!$this->auth->setToken($token)->authenticate()) {
+                    throw new UnauthorizedHttpException('jwt-auth', 'Refresh token failed');
+                }
             } catch (JWTException $exception) {
                 throw new UnauthorizedHttpException('jwt-auth', $exception->getMessage());
             }
         }
         return $this->setAuthenticationHeader($next($request), $token);
-    }
-
-    /**
-     * Set the authentication header.
-     *
-     * @param  \Illuminate\Http\Response|\Illuminate\Http\JsonResponse  $response
-     * @param  string|null  $token
-     *
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     */
-    protected function setAuthenticationHeader($response, $token = null)
-    {
-        $response->headers->set('Authorization', $token);
-
-        return $response;
     }
 }

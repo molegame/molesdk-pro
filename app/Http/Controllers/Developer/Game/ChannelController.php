@@ -81,7 +81,18 @@ class ChannelController extends Controller
     {
         $game = $this->guard()->user()->games()->findOrFail($game_id);
         $channel = $game->channels()->where('channel_id', $channel_id)->first();
-        return ChannelResource::make($channel);
+        $base = $channel->base();
+
+        return [
+            'id' => $channel->channel_id,
+            'name' => $base['name'],
+            'description' => $base['desc'],
+            'bundle_id' => $channel->bundle_id,
+            'params' => json_decode($channel->params, true),
+            'icon' => $channel->icon,
+            'splashes' => $channel->splashes,
+            'goods' => $channel->goods
+        ];
     }
 
     /**

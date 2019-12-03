@@ -46,7 +46,7 @@ class Channel extends Model
     /**
      * Get the base info of channel.
      */
-    public function info()
+    public function base()
     {
         $channels = config('channels');
         foreach ($channels as $channel) {
@@ -62,7 +62,7 @@ class Channel extends Model
      */
     public function driver()
     {
-        return $this->info()['driver'];
+        return $this->base()['driver'];
     }
 
     /**
@@ -70,6 +70,6 @@ class Channel extends Model
      */
     public function verifyUrl()
     {
-        return $this->info()['verify_url'];
+        return $this->base()['verify_url'];
     }
 }
